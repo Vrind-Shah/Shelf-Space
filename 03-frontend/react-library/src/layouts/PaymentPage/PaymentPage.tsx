@@ -24,7 +24,15 @@ export const PaymentPage = () => {
           }
 
           const data = await response.json();
-          setFees(data.amount);
+
+          const payments = data._embedded?.payment || data._embedded?.payments;
+
+          if (payments && payments.length > 0) {
+            setFees(payments[0].amount);
+          } else {
+            setFees(0);
+          }
+
         } catch (err: any) {
           setHttpError("Something went wrong!");
         }

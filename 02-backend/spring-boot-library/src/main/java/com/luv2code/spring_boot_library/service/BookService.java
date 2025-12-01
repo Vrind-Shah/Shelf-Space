@@ -69,7 +69,9 @@ public class BookService {
             }
         }
 
-        Payment userPayment = paymentRepository.findByUserEmail(userEmail);
+        List<Payment> userPayments = paymentRepository.findByUserEmail(userEmail);
+        Payment userPayment = userPayments.isEmpty() ? null : userPayments.get(0);
+
 
         if((userPayment != null && userPayment.getAmount() > 0) || userPayment != null && bookNeedsReturned) {
             throw new Exception("Outstanding Fees");
@@ -169,10 +171,13 @@ public class BookService {
         double differenceInTime = time.convert(d1.getTime() - d2.getTime(), TimeUnit.MILLISECONDS);
 
         if(differenceInTime < 0){
-            Payment payment = paymentRepository.findByUserEmail(userEmail);
+            List<Payment> userPayments = paymentRepository.findByUserEmail(userEmail);
+            Payment payment = userPayments.isEmpty() ? null : userPayments.get(0);
 
-            payment.setAmount(payment.getAmount() + (differenceInTime * -1));
-            paymentRepository.save(payment);
+            if (differenceInTime < 0) {
+                payment.setAmount(payment.getAmount() + (differenceInTime * -1));
+                paymentRepository.save(payment);
+            }
         }
 
         checkoutRepository.deleteById(validateCheckout.getId());

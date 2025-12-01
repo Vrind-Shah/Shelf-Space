@@ -15,6 +15,18 @@ import { auth0Config } from './lib/auth0Config';
 import LoginPage from './Auth/LoginPage';
 import { PaymentPage } from './layouts/PaymentPage/PaymentPage';
 
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
+
 const Auth0ProviderWithHistory = ({ children }: { children: React.ReactNode }) => {
   const history = useHistory();
 
@@ -51,6 +63,9 @@ export const App = () => {
       <Auth0ProviderWithHistory>
       <Navbar />
       <div className='flex-grow-1'>
+
+        <ScrollToTop />
+
         <Switch>
           <Route path='/' exact>
             <Redirect to='/home' />

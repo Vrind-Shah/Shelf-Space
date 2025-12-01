@@ -38,8 +38,12 @@ public class SecurityConfiguration {
                         .requestMatchers(
                                 "/api/books/secure/**",
                                 "/api/reviews/secure/**",
-                                "/api/messages/secure/**"
+                                "/api/messages/secure/**",
+                                "/api/payment/secure/**"
                         ).authenticated()
+
+                        // Public Payment API (search endpoints)
+                        .requestMatchers("/api/payment/**").permitAll()
 
                         // Public
                         .anyRequest().permitAll()

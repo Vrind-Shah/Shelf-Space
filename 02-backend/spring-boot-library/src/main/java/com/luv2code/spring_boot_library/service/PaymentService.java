@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class PaymentService {
@@ -41,7 +43,8 @@ public class PaymentService {
     }
 
     public ResponseEntity<String> razorpayPayment(String userEmail) throws Exception {
-        Payment payment = paymentRepository.findByUserEmail(userEmail);
+        List<Payment> userPayments = paymentRepository.findByUserEmail(userEmail);
+        Payment payment = userPayments.isEmpty() ? null : userPayments.get(0);
 
         if (payment == null) {
             throw new Exception("Payment information is missing");
